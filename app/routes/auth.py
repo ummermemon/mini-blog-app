@@ -3,10 +3,12 @@ from app.forms.registration import RegistrationForm
 from app.forms.login import LoginForm
 from app.models.user import User
 from app import db,bcrypt
+from app.middlewares.auth import logout_required
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/signup', methods=['GET', 'POST'])
+@logout_required
 def signup():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -31,6 +33,7 @@ def signup():
     return render_template('auth/signup.html', form=form)
 
 @auth.route('/login', methods=['GET', 'POST'])
+@logout_required
 def login():
     form = LoginForm()
     if form.validate_on_submit():
